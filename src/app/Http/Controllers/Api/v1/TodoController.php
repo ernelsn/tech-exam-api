@@ -10,7 +10,9 @@ class TodoController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $todos = Todo::with('user')->get();
+        $todos = Todo::with('user')
+            ->where('user_id', $request->user()->id)
+            ->get();
  
         return ['todos' => $todos];
     }

@@ -9,10 +9,21 @@ use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
-        $albums = Album::with('user')->get();
+        $albums = Album::with('user')
+            ->where('user_id', $request->user()->id)
+            ->get();
  
         return ['albums' => $albums];
+    }
+
+    public function show(Request $request, Album $album)
+    {
+        if ($album->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        return response()->json(['post' => $album->load('user')]);
     }
 }

@@ -13,6 +13,11 @@ class Photo extends Model
         'url',
         'thumbnail_url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
  
     public function album(): BelongsTo
     {

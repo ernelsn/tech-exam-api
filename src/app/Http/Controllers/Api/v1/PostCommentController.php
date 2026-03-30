@@ -11,13 +11,20 @@ class PostCommentController extends Controller
 {
     public function index(Post $post)
     {
-        $comments = $post->comments()->with('user')->get();
+        if ($post->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
 
+        $comments = $post->comments()->with('user')->get();
         return ['comments' => $comments];
     }
 
     public function show(Post $post, Comment $comment)
     {
+        if ($post->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
         return ['comment' => $comment->load('user')];
     }
 }

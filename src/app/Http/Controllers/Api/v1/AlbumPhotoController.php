@@ -5,20 +5,26 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Photo;
-use App\Models\Todo;
 use Illuminate\Http\Request;
 
 class AlbumPhotoController extends Controller
 {
     public function index(Album $album)
     {
-        $photos = $album->photos()->with('user')->get();
+        if ($album->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
 
-        return ['photos' => $photos];
+        $albums = $album->photos()->with('user')->get();
+        return ['albums' => $albums];
     }
 
-    public function show(Album $Album, Photo $photo)
+    public function show(Album $album, Photo $photo)
     {
-        return ['photo' => $photo->load('user')];
+        if ($album->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        return ['photo' => $photo];
     }
 }
