@@ -59,4 +59,7 @@ docker-compose down
 
 # Run the command to fetch the API from the source
 docker-compose run --rm artisan app:fetch-json-api-data
+
+# Default password for all the user accounts:
+P@ssword123
 ```
